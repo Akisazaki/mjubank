@@ -76,7 +76,7 @@ function AccountCard(props: AccountCardProps) {
         <CardContent>
           <Typography variant="h6">{type}</Typography>
           <Typography variant="h5">계좌번호: {account.account_id}</Typography>
-          <Typography>개설일: {account.created_at.toString()}</Typography>
+          <Typography>개설일: {moment(account.created_at).format('LL HH:mm')}</Typography>
           <Typography variant="h4">&#8361; {account.balance}</Typography>
         </CardContent>
         <CardContent>
@@ -271,27 +271,28 @@ function AccountCard(props: AccountCardProps) {
   )
 }
 
+function getTransactionType(transaction: Transaction) {
+  switch (transaction.transaction_type) {
+    case 1:
+      return "출금"
+    case 2:
+      return "송금"
+    case 3:
+      return "카드결재"
+    case 4:
+      return "입금"
+    default:
+      return "입금"
+  }
+}
+
 interface TransactionCardProps {
   transaction: Transaction
 }
 
 function TransactionCard(props: TransactionCardProps) {
   const { transaction } = props
-  let type = '입금'
-  switch (transaction.transaction_type) {
-    case 1:
-      type = "출금"
-      break
-    case 2:
-      type = "송금"
-      break
-    case 3:
-      type = "카드 결재"
-      break
-    default:
-      type = "입금"
-      break
-  }
+  let type = getTransactionType(transaction)
   return (
     <Card>
       <CardContent>
@@ -390,6 +391,7 @@ export function AccountDetailPage() {
     const { account, transactions } = data!
     const columns: GridColDef[] = [
       { field: 'transaction_date', headerName: 'Date', width: 150 },
+      { field: 'transaction_type', headerName: 'Type', width: 90 },
       { field: 'account_id', headerName: 'Account', width: 125 },
       { field: 'counter_party_account', headerName: 'Counter party', width: 125 },
       { field: 'balance_after', headerName: 'Balance after', type: 'number', width: 170 },
@@ -414,20 +416,22 @@ export function AccountDetailPage() {
               return {
                 ...item,
                 id: item.serial_number,
-                transaction_date: moment(item.transaction_date).format('YYYY-MM-DD HH:mm')
+                transaction_date: moment(item.transaction_date).format('YYYY-MM-DD HH:mm'),
+                transaction_type: getTransactionType(item)
               }
             })}
             columns={columns}
-            pageSize={50}
+            pageSize={100}
             rowsPerPageOptions={[10]}
             style={
               {
                 marginTop: '20px',
-                height: '700px'
+                height: '800px'
               }
             }
           />
         }
+        <Button onClick={refresh}>새로고침</Button>
         <LoadingScreen open={loading} />
       </Dashboard >
     )

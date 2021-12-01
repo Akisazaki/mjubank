@@ -1,11 +1,18 @@
 import { Box, Button, Card, CardContent, CircularProgress, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import axios from 'axios';
+import moment from 'moment';
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 import { Dashboard } from "../components/Dashboard";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { Account } from '../model/entity/account';
 import { getApi } from '../utils/Config';
+
+function dd(date :Date|undefined) {
+  if (date) return moment(date).format('LL HH:mm')
+  else return ''
+}
+
 
 interface AccountCardProps {
   account: Account
@@ -30,7 +37,7 @@ function AccountCard(props: AccountCardProps) {
       <CardContent>
         <Typography variant="h6">{type}</Typography>
         <Typography variant="h5">계좌번호: {account.account_id}</Typography>
-        <Typography>개설일: {account.created_at.toString()}</Typography>
+        <Typography>개설일: {dd(account.created_at)}</Typography>
         <Typography variant="h4">&#8361; {account.balance}</Typography>
         <Link to={'/accounts/' + account.account_id}>상세보기</Link>
       </CardContent>
@@ -72,7 +79,7 @@ export function AccountPage() {
   }
 
   return (
-    <Dashboard title="사용자 정보">
+    <Dashboard title="계좌 관리">
       <Box sx={{ display: 'flex', gap: 1, flexDirection: 'column', mt: 1 }}>
         {accounts === undefined ? <CircularProgress /> : accounts.length === 0 ?
           <>

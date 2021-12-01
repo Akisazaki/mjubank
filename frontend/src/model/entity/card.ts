@@ -5,5 +5,5 @@ export interface Card {
   card_type: number
   account_id: number
   dropped_at?: number
-  expired_at: number
+  expired_at: Date
 }

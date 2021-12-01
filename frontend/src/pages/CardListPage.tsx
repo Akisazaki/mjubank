@@ -1,6 +1,7 @@
 import { Refresh } from '@mui/icons-material';
 import { Box, Button, Card, CardActions, CardContent, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import moment from 'moment';
 import { ChangeEvent, useState } from "react";
 import { Dashboard } from "../components/Dashboard";
 import { LoadingScreen } from "../components/LoadingScreen";
@@ -18,6 +19,11 @@ interface AccountCardProps {
   card: ICard,
   updateLimit: (card: ICard, limit: number) => void,
   toggleCard: (card: ICard) => void
+}
+
+function dd(date: Date | undefined | number) {
+  if (date) return moment(date).format('LL HH:mm')
+  else return ''
 }
 
 function CardView(props: AccountCardProps) {
@@ -49,8 +55,8 @@ function CardView(props: AccountCardProps) {
           <Typography variant="h6">{type}</Typography>
           <Typography variant="h4">{cardIdToString(card.card_id)}</Typography>
           <Typography>연결된 계좌: {card.account_id}</Typography>
-          <Typography>신청일: {card.application_date.toLocaleString()}</Typography>
-          <Typography>만료일: {card.expired_at.toLocaleString()}</Typography>
+          <Typography>신청일: {dd(card.application_date)}</Typography>
+          <Typography>만료일: {dd(card.expired_at)}</Typography>
           <Typography>한도: &#8361;{Math.round(card.limit || 100000)}</Typography>
           {card.dropped_at && <Typography>정지일: {card.dropped_at.toLocaleString()}</Typography>}
         </CardContent>
@@ -217,7 +223,7 @@ export function CardListPage() {
   }
 
   return (
-    <Dashboard title="사용자 정보">
+    <Dashboard title="카드 관리">
       <Box sx={{ display: 'flex', gap: 1, flexDirection: 'column', mt: 1 }}>
         {cards === undefined ? <CircularProgress /> : cards.length === 0 ?
           <>
