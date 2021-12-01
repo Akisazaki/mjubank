@@ -1,24 +1,18 @@
 import { Router } from 'express'
-import passport from 'passport'
 import { Connection } from 'typeorm'
+import AccountRouter from './account'
+import CardRouter from './card'
 import CustomerRouter from './customer'
+import TransactionRouter from './transaction'
 
 
 function APIRouter(connection: Connection) {
   const router = Router()
 
-  // session
-  router.post('/login',
-    passport.authenticate('local', { failureRedirect: '/' }),
-    (req, res) => {
-      res.redirect('/')
-    })
-  router.post('/logout', (req, res) => {
-    req.logout()
-    res.redirect('/')
-  })
-
   CustomerRouter(router, connection)
+  AccountRouter(router, connection)
+  TransactionRouter(router, connection)
+  CardRouter(router, connection)
   return router
 }
 

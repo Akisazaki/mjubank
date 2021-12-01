@@ -4,9 +4,10 @@ DROP procedure IF EXISTS `Transfer`;
 DELIMITER $$
 USE `mjubank`$$
 CREATE PROCEDURE `Transfer`(
-	IN _from BIGINT,
-    IN _to BIGINT,
-    IN _amount DECIMAL(15,2)
+	IN _from BIGINT UNSIGNED,
+    IN _to BIGINT UNSIGNED,
+    IN _amount DECIMAL(15,2),
+    IN _note VARCHAR(64)
 )
 BEGIN
 	DECLARE balance_from DECIMAL(15,2);
@@ -22,7 +23,7 @@ BEGIN
 			SELECT 'TO ACCOUNT NOT FOUND';
 		ELSE
 			SET balance_to = balance_to + _amount;
-			INSERT transaction (account_id, transaction_type, transaction_date, amount, balance_after, counter_party_account) values (_from, 0, NOW(), _amount, balance_from, _to);
+			INSERT transaction (account_id, transaction_type, transaction_date, amount, balance_after, counter_party_account, note) values (_from, 2, NOW(), _amount, balance_from, _to, _note);
 			UPDATE account SET balance = balance_to WHERE account_id = _to;
 			UPDATE account SET balance = balance_from WHERE account_id = _from;
 			SELECT * FROM transaction WHERE serial_number = LAST_INSERT_ID();
@@ -32,11 +33,3 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
-
-
-SET @_from   = 1345862154;
-SET @_to     = 1345862152;
-SET @_amount = 1000;
-SET @_result = NULL;
-
-CALL `Transfer`(@_from, @_to, @_amount);

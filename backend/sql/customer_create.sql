@@ -6,7 +6,7 @@ USE `mjubank`$$
 CREATE PROCEDURE `CreateCustomer`(
 	IN ssn BIGINT UNSIGNED,
 	IN name VARCHAR(45),
-    IN address VARCHAR(45),
+    IN address VARCHAR(255),
     IN birthday DATE,
     IN email VARCHAR(45),
     IN tel VARCHAR(15),

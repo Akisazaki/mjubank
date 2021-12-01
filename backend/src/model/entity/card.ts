@@ -12,9 +12,6 @@ export class Card {
   @Column({ type: "decimal", precision: 15, scale: 2, unsigned: true })
   limit?: number
 
-  @Column({ type: "datetime" })
-  payment_at?: Date
-
   @Column({ type: "tinyint", unsigned: true })
   card_type!: number
 
@@ -24,4 +21,7 @@ export class Card {
 
   @Column({ type: "datetime" })
   dropped_at?: number
+
+  @Column({ type: "datetime" })
+  expired_at?: Date
 }

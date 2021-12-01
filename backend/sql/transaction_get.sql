@@ -4,8 +4,8 @@ DROP procedure IF EXISTS `GetTransfer`;
 DELIMITER $$
 USE `mjubank`$$
 CREATE PROCEDURE `GetTransfer`(
-	IN account_id BIGINT,
-    IN account_to BIGINT
+	IN account_id BIGINT UNSIGNED,
+    IN account_to BIGINT UNSIGNED
 )
 BEGIN
 	IF account_to IS NULL THEN
