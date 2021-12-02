@@ -1,9 +1,5 @@
-USE `mjubank`;
-DROP procedure IF EXISTS `Transfer`;
-
-DELIMITER $$
-USE `mjubank`$$
-CREATE PROCEDURE `Transfer`(
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Transfer`(
 	IN _from BIGINT UNSIGNED,
     IN _to BIGINT UNSIGNED,
     IN _amount DECIMAL(15,2),
@@ -23,7 +19,8 @@ BEGIN
 			SELECT 'TO ACCOUNT NOT FOUND';
 		ELSE
 			SET balance_to = balance_to + _amount;
-			INSERT transaction (account_id, transaction_type, transaction_date, amount, balance_after, counter_party_account, note) values (_from, 2, NOW(), _amount, balance_from, _to, _note);
+			INSERT transaction (account_id, transaction_type, transaction_date, amount, balance_after, counter_party_account, note) values (_from, 0, NOW(), _amount, balance_from, _to, _note);
+            INSERT transaction (account_id, transaction_type, transaction_date, amount, balance_after, counter_party_account, note) values (_to, 4, NOW(), _amount, balance_to, _from, _note);
 			UPDATE account SET balance = balance_to WHERE account_id = _to;
 			UPDATE account SET balance = balance_from WHERE account_id = _from;
 			SELECT * FROM transaction WHERE serial_number = LAST_INSERT_ID();
@@ -31,5 +28,5 @@ BEGIN
 	ELSE
 		SELECT 'LACK_OF_BALANCE';
     END IF;
-END$$
+END ;;
 DELIMITER ;

@@ -1,9 +1,5 @@
-USE `mjubank`;
-DROP procedure IF EXISTS `ApplicateCard`;
-
-DELIMITER $$
-USE `mjubank`$$
-CREATE PROCEDURE `ApplicateCard`(
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ApplicateCard`(
 	IN _card_id BIGINT UNSIGNED,
 	IN _account_id BIGINT UNSIGNED,
 	IN _limit DECIMAL(15, 2),
@@ -18,10 +14,5 @@ BEGIN
 		INSERT card values (_card_id, NOW(), _limit, _type, _account_id, null, DATE_ADD(NOW(), INTERVAL 10 YEAR));
 		SELECT * FROM card WHERE card.card_id = _card_id;
 	END IF;
-END$$
+END ;;
 DELIMITER ;
-
-
-
-/* UNIT TEST */
-/* CALL `CreateCustomer`(41230123, 'Test', 'TestAddress', '1987-07-24', 'test@mjubank.com', '034-243-1131', 'Student', 0x48efc4851e15940af5d477d3c0ce99211a70a3be, 0) */

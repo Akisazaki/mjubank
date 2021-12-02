@@ -1,1 +1,0 @@
-INSERT INTO customer values(21317328758, "Seras, Serifa", "서울특별시 송파구 잠실동 35", '1992-03-21', "seras@mjubank.com", "003-211-1341", "Programmer", 0x48efc4851e15940af5d477d3c0ce99211a70a3be, NULL, 0)

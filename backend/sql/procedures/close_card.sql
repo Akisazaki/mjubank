@@ -1,9 +1,5 @@
-USE `mjubank`;
-DROP procedure IF EXISTS `CloseAccount`;
-
-DELIMITER $$
-USE `mjubank`$$
-CREATE PROCEDURE `CloseAccount`(
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CloseAccount`(
 	IN account_id BIGINT
 )
 BEGIN
@@ -18,11 +14,5 @@ BEGIN
 		UPDATE account SET account.disabled_at = NOW() WHERE account.account_id = account_id;
 		SELECT * FROM account WHERE account.account_id = account_id;
     END IF;
-END$$
+END ;;
 DELIMITER ;
-
-
-
-/* UNIT TEST */
-SET @account_id = 1345862151;
-CALL `CloseAccount`(@account_id);

@@ -1,9 +1,5 @@
-USE `mjubank`;
-DROP procedure IF EXISTS `CreateCustomer`;
-
-DELIMITER $$
-USE `mjubank`$$
-CREATE PROCEDURE `CreateCustomer`(
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateCustomer`(
 	IN ssn BIGINT UNSIGNED,
 	IN name VARCHAR(45),
     IN address VARCHAR(255),
@@ -23,10 +19,5 @@ BEGIN
 		INSERT customer values (ssn, name, address, birthday, email, tel, job, password, null, customer_type);
 		SELECT * FROM customer WHERE customer.ssn = ssn;
 	END IF;
-END$$
+END ;;
 DELIMITER ;
-
-
-
-/* UNIT TEST */
-/* CALL `CreateCustomer`(41230123, 'Test', 'TestAddress', '1987-07-24', 'test@mjubank.com', '034-243-1131', 'Student', 0x48efc4851e15940af5d477d3c0ce99211a70a3be, 0) */
